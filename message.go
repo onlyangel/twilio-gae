@@ -1,9 +1,10 @@
 package twiliogae
 
 import (
-	"appengine"
+	//"google.golang.org/appengine"
 	"encoding/json"
 	"net/url"
+	"golang.org/x/net/context"
 )
 
 type Message struct {
@@ -24,7 +25,7 @@ type Message struct {
 	Uri         string `json:"uri"`
 }
 
-func NewMessage(c appengine.Context, client Client, from string, to string, content ...Optional) (*Message, error) {
+func NewMessage(c context.Context, client Client, from string, to string, content ...Optional) (*Message, error) {
 	var message *Message
 
 	params := url.Values{}
