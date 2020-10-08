@@ -2,14 +2,14 @@ package twiliogae
 
 import (
 	//"google.golang.org/appengine"
-	"google.golang.org/appengine/urlfetch"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-	"golang.org/x/net/context"
+	"time"
 )
 
 type Client interface {
@@ -40,7 +40,11 @@ func (client *TwilioClient) post(c context.Context, values url.Values, uri strin
 	req.SetBasicAuth(client.AccountSid(), client.AuthToken())
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	tr := &urlfetch.Transport{Context: c}
+	tr := &http.Transport{
+		MaxIdleConns:       10,
+		IdleConnTimeout:    30 * time.Second,
+		DisableCompression: true,
+	}
 
 	res, err := tr.RoundTrip(req)
 	if err != nil {
